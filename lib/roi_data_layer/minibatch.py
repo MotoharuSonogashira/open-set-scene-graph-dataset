@@ -10,7 +10,7 @@ import numpy.random as npr
 from fast_rcnn.config import cfg
 from utils.blob import prep_im_for_blob, im_list_to_blob
 #from datasets.viz import viz_scene_graph
-import data_utils
+from . import data_utils
 from IPython import embed
 from utils.timer import Timer
 
@@ -45,7 +45,7 @@ def get_minibatch(roidb, num_classes):
 
     d_timer = Timer()
     d_timer.tic()
-    for im_i in xrange(num_images):
+    for im_i in range(num_images):
         # sample graph
         roi_inds, rels = _sample_graph(roidb[im_i],
                                         fg_rois_per_image,
@@ -154,7 +154,7 @@ def _sample_graph(roidb, num_fg_rois, num_rois, num_neg_rels=128):
     # find all fg proposals that are mapped to a gt
     gt_to_fg_roi_inds = {}
     all_fg_roi_inds = []
-    for ind, gt_ind in fg_gt_ind_assignments.items():
+    for ind, gt_ind in list(fg_gt_ind_assignments.items()):
         if gt_ind not in gt_to_fg_roi_inds:
             gt_to_fg_roi_inds[gt_ind] = []
         gt_to_fg_roi_inds[gt_ind].append(ind)
@@ -255,7 +255,7 @@ def _get_image_blob(roidb, scale_inds):
     num_images = len(roidb)
     processed_ims = []
     im_scales = []
-    for i in xrange(num_images):
+    for i in range(num_images):
         im = roidb[i]['image']() # use image getter
 
         if roidb[i]['flipped']:

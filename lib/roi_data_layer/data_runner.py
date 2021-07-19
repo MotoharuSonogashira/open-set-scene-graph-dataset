@@ -16,11 +16,11 @@ class DataRunnerMP:
 
     def get_feed_batch(self):
         if self.counter % 100 == 0:
-            print('qlen=%i' % self.data_queue.qsize())
+            print(('qlen=%i' % self.data_queue.qsize()))
         self.counter += 1
         feed = self.data_queue.get()
         out_feed= {}
-        for k, v in feed.items():
+        for k, v in list(feed.items()):
             out_feed[self._input_pls[k]] = v
         return out_feed
 
@@ -38,7 +38,7 @@ class DataRunnerMP:
             if sample is None:
                 continue
             feed = {}
-            for key, pl in self._input_pls.items():
+            for key, pl in list(self._input_pls.items()):
                 feed[key] = sample[key]
             data_queue.put(feed)
 

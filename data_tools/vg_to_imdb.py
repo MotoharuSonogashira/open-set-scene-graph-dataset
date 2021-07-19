@@ -1,7 +1,7 @@
 # coding=utf8
 
 import argparse, os, json, string
-from Queue import Queue
+from queue import Queue
 from threading import Thread, Lock
 
 import h5py
@@ -70,7 +70,7 @@ def add_images(im_data, h5_file, args):
             i, filename = q.get()
 
             if i % 10000 == 0:
-                print('processing %i images...' % i)
+                print(('processing %i images...' % i))
             img = imread(filename)
             # handle grayscale
             if img.ndim == 2:

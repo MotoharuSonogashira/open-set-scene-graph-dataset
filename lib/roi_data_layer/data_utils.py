@@ -23,9 +23,9 @@ def create_graph_data(num_roi, num_rel, relations):
     # compute relation pair inds
     rel_pair_mask_inds = []  #
     rel_pair_segment_inds = []  # for segment gather
-    for i in xrange(num_roi):
+    for i in range(num_roi):
         mask_inds = []
-        for j in xrange(num_roi):
+        for j in range(num_roi):
             out_inds = roi_rel_inds[i,j]
             in_inds = roi_rel_inds[j,i]
             if out_inds >= 0 and in_inds >= 0:

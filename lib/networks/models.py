@@ -7,9 +7,9 @@
 
 import tensorflow as tf
 from networks.network import Network
-import losses
+from . import losses
 from fast_rcnn.config import cfg
-import net_utils as utils
+from . import net_utils as utils
 
 """
 A TensorFlow implementation of the scene graph generation models introduced in
@@ -205,7 +205,7 @@ class dual_graph_vrd(basenet):
         vert_factor = self._vert_rnn_forward(vert_unary, reuse=False)
         edge_factor = self._edge_rnn_forward(edge_unary, reuse=False)
 
-        for i in xrange(self.n_iter):
+        for i in range(self.n_iter):
             reuse = i > 0
             # compute edge states
             edge_ctx = self._compute_edge_context(vert_factor, edge_factor, reuse=reuse)

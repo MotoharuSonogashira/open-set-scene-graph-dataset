@@ -10,12 +10,12 @@ def _compute_gt_target(pred_boxes, pred_class_scores, gt_boxes):
     gt_target_iou = np.zeros(num_boxes)
     gt_target_iou.fill(-1)
 
-    for j in xrange(num_boxes):
+    for j in range(num_boxes):
         # prepare inputs
         bbox = pred_boxes[j].astype(float)
         # compute max IoU over classes
         # for c in xrange(1, num_classes):
-        for c in xrange(pred_class_scores.shape[1]):
+        for c in range(pred_class_scores.shape[1]):
             bb = bbox[4*c:4*(c+1)]
             if gt_boxes.size > 0:
                 # compute overlaps
@@ -69,7 +69,7 @@ def ground_predictions(sg_entry, roidb_entry, ovthresh=0.5):
     # if referenced more than once, use the one that
     # has the maximum IoU
     gt_to_pred = {} # {gt_ind: pred_ind}
-    for j in xrange(num_boxes):
+    for j in range(num_boxes):
         gti = gt_targets[j] # referenced gt ind
         if gti in gt_to_pred:
             pred_ind = gt_to_pred[gti]

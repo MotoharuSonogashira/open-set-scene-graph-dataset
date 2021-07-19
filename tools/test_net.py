@@ -74,12 +74,12 @@ if __name__ == '__main__':
     pprint.pprint(cfg)
 
     while not os.path.exists(args.model) and args.wait:
-        print('Waiting for {} to exist...'.format(args.model))
+        print(('Waiting for {} to exist...'.format(args.model)))
         time.sleep(10)
 
 
     device_name = '/gpu:{:d}'.format(args.gpu_id)
-    print device_name
+    print(device_name)
 
     cfg.GPU_ID = args.gpu_id
 

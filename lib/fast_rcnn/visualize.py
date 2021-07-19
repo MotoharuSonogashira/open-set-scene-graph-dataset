@@ -43,8 +43,8 @@ def draw_graph_pred(im, boxes, cls_score, rel_score, gt_to_pred, roidb):
     rel_pred = []
     all_rels = []
 
-    for i in xrange(rel_pred_mat.shape[0]):
-        for j in xrange(rel_pred_mat.shape[1]):
+    for i in range(rel_pred_mat.shape[0]):
+        for j in range(rel_pred_mat.shape[1]):
             # find graph predictions (nodes and edges) that have
             # correspounding ground truth annotations
             # ignore nodes that have no edge connections
@@ -109,7 +109,7 @@ def viz_net(net_name, weight_name, imdb, viz_mode='viz_cls'):
 
     net = get_network(net_name)(inputs)
     net.setup()
-    print ('Loading model weights from {:s}').format(weight_name)
+    print(('Loading model weights from {:s}').format(weight_name))
     saver = tf.train.Saver()
     saver.restore(sess, weight_name)
 
@@ -124,12 +124,12 @@ def viz_net(net_name, weight_name, imdb, viz_mode='viz_cls'):
         inference_iter = net.n_iter - 1
     else:
         inference_iter = 0
-    print('=======================VIZ INFERENCE Iteration = '),
+    print(('=======================VIZ INFERENCE Iteration = '), end=' ')
     print(inference_iter)
-    print('=======================VIZ MODES = '),
+    print(('=======================VIZ MODES = '), end=' ')
     print(viz_mode)
 
-    for im_i in xrange(num_images):
+    for im_i in range(num_images):
         im = imdb.im_getter(im_i)
 
         bbox_reg = True

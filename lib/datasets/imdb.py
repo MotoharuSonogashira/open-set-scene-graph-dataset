@@ -89,7 +89,7 @@ class imdb(object):
     @staticmethod
     def merge_gt_rpn_roidb(gt_roidb, rpn_roidb):
         assert len(gt_roidb) == len(rpn_roidb)
-        for i in xrange(len(gt_roidb)):
+        for i in range(len(gt_roidb)):
             gt_roidb[i]['boxes'] = np.vstack((gt_roidb[i]['boxes'], rpn_roidb[i]['boxes']))
             gt_roidb[i]['gt_overlaps'] = scipy.sparse.vstack([gt_roidb[i]['gt_overlaps'],
                                                        rpn_roidb[i]['gt_overlaps']])
@@ -102,7 +102,7 @@ class imdb(object):
     def append_flipped_images(self):
         num_images = self.num_images
         widths = self._get_widths()
-        for i in xrange(num_images):
+        for i in range(num_images):
             boxes = self.roidb[i]['boxes'].copy()
             oldx1 = boxes[:, 0].copy()
             oldx2 = boxes[:, 2].copy()

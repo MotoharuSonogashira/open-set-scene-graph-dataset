@@ -25,7 +25,7 @@ def layer(op):
         layer_output = op(self, layer_input, *args, **kwargs)
         # Add to layer LUT.
         if name in self.layers:
-            print('overriding layer %s!!!!' % name)
+            print(('overriding layer %s!!!!' % name))
         self.layers[name] = layer_output
         # This output is now the input for the next layer.
         self.feed(layer_output)
@@ -50,7 +50,7 @@ class Network(object):
                 if not load_fc and key.startswith('fc'):
                     print('ignoring fc layers!')
                     continue
-                print key
+                print(key)
                 for subkey, data in zip(('weights', 'biases'), data_dict[key]):
                     try:
                         var = tf.get_variable(subkey)
@@ -63,12 +63,12 @@ class Network(object):
         assert len(args)!=0
         self.inputs = []
         for layer in args:
-            if isinstance(layer, basestring):
+            if isinstance(layer, str):
                 try:
                     layer = self.layers[layer]
-                    print layer
+                    print(layer)
                 except KeyError:
-                    print self.layers.keys()
+                    print(list(self.layers.keys()))
                     raise KeyError('Unknown layer name fed: %s'%layer)
             self.inputs.append(layer)
         return self
@@ -85,7 +85,7 @@ class Network(object):
         try:
             layer = self.layers[layer]
         except KeyError:
-            print self.layers.keys()
+            print(list(self.layers.keys()))
             raise KeyError('Unknown layer name fed: %s'%layer)
         return layer
 
@@ -95,7 +95,7 @@ class Network(object):
             self._variable_summaries(layer, layer_name)
 
         except KeyError:
-            print self.layers.keys()
+            print(list(self.layers.keys()))
             raise KeyError('Unknown layer name fed: %s'%layer)
         return layer
 
@@ -107,7 +107,7 @@ class Network(object):
             tf.histogram_summary(name, var)
 
     def get_unique_name(self, prefix):
-        id = sum(t.startswith(prefix) for t,_ in self.layers.items())+1
+        id = sum(t.startswith(prefix) for t,_ in list(self.layers.items()))+1
         return '%s_%d'%(prefix, id)
 
     def make_var(self, name, shape, initializer=None, trainable=True):
@@ -181,7 +181,7 @@ class Network(object):
         # only use the first input
         if isinstance(input[0], tuple):
             input[0] = input[0][0]
-        print input
+        print(input)
 
         return roi_pool_op.roi_pool(input[0], input[1],
                               pooled_height,
@@ -212,7 +212,7 @@ class Network(object):
                 input = input[0]
 
             input_shape = input.get_shape()
-            print input_shape
+            print(input_shape)
             if input_shape.ndims == 4:
                 dim = 1
                 for d in input_shape[1:].as_list():

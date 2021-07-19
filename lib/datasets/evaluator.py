@@ -3,7 +3,7 @@ A helper class for evaluating scene graph prediction tasks
 """
 
 import numpy as np
-from sg_eval import eval_relation_recall
+from .sg_eval import eval_relation_recall
 
 class SceneGraphEvaluator:
 
@@ -30,6 +30,6 @@ class SceneGraphEvaluator:
 
 
     def print_stats(self):
-        print('======================' + self.mode + '============================')
-        for k, v in self.result_dict[self.mode + '_recall'].items():
-            print('R@%i: %f' % (k, np.mean(v)))
+        print(('======================' + self.mode + '============================'))
+        for k, v in list(self.result_dict[self.mode + '_recall'].items()):
+            print(('R@%i: %f' % (k, np.mean(v))))

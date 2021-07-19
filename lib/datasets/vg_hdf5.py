@@ -20,7 +20,7 @@ class vg_hdf5(imdb):
         self.im_refs = self.im_h5['images'] # image data reference
         im_scale = self.im_refs.shape[2]
 
-        print('split==%i' % split)
+        print(('split==%i' % split))
         data_split = self.roi_h5['split'][:]
         self.split = split
         if split >= 0:

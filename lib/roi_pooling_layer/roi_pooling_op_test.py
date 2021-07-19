@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-import roi_pooling_op_grad
+from . import roi_pooling_op_grad
 
 def weight_variable(shape):
   initial = tf.truncated_normal(shape, stddev=0.1)
@@ -17,10 +17,10 @@ W = weight_variable([3, 3, 1, 1])
 h = conv2d(data, W)
 
 module = tf.load_op_library(tf.sysconfig.get_lib() + '/user_ops/roi_pooling_op_gpu.so')
-print dir(module)
+print(dir(module))
 [y, argmax] = module.roi_pool(h, rois, 1, 1, 1.0/1)
 y_data = tf.convert_to_tensor(np.ones((2, 1, 1, 1)), dtype=tf.float32)
-print y_data, y, argmax
+print(y_data, y, argmax)
 
 # Minimize the mean squared errors.
 loss = tf.reduce_mean(tf.square(y - y_data))
@@ -33,9 +33,9 @@ init = tf.initialize_all_variables()
 sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 sess.run(init)
 
-for step in xrange(101):
+for step in range(101):
     sess.run(train)
-    print(step, sess.run(W))
+    print((step, sess.run(W)))
 
 #with tf.device('/gpu:0'):
 #  result = module.roi_pool(data, rois, 1, 1, 1.0/1)

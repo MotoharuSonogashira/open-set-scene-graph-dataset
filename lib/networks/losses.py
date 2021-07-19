@@ -1,5 +1,5 @@
 import tensorflow as tf
-from net_utils import exp_average_summary
+from .net_utils import exp_average_summary
 
 
 def sparse_softmax(logits, labels, name, loss_weight=1, ignore_bg=False):

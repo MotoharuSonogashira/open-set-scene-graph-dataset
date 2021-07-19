@@ -273,7 +273,7 @@ def encode_objects(obj_data, token_to_idx, token_counter, org_h, org_w, im_long_
         else:
             im_to_last_obj[i] = obj_counter - 1
 
-    for k, boxes in encoded_boxes.items():
+    for k, boxes in list(encoded_boxes.items()):
         encoded_boxes[k] = np.vstack(boxes)
     return np.vstack(encoded_labels), encoded_boxes, im_to_first_obj, im_to_last_obj
 
@@ -329,12 +329,12 @@ def encode_relationships(rel_data, token_to_idx, obj_data):
             no_rel_counter += 1
         else:
             im_to_last_rel[i] = rel_idx_counter - 1
-    print('%i rel is filtered by object' % obj_filtered)
-    print('%i rel is filtered by predicate' % predicate_filtered)
-    print('%i rel is filtered by duplicate' % duplicate_filtered)
-    print('%i rel remains ' % len(encoded_pred))
+    print(('%i rel is filtered by object' % obj_filtered))
+    print(('%i rel is filtered by predicate' % predicate_filtered))
+    print(('%i rel is filtered by duplicate' % duplicate_filtered))
+    print(('%i rel remains ' % len(encoded_pred)))
 
-    print('%i out of %i valid images have relationships' % (len(rel_data)-no_rel_counter, len(rel_data)))
+    print(('%i out of %i valid images have relationships' % (len(rel_data)-no_rel_counter, len(rel_data))))
     return np.vstack(encoded_pred), np.vstack(encoded_rel), im_to_first_rel, im_to_last_rel
 
 
@@ -354,7 +354,7 @@ def sentence_preprocess(phrase):
     }
     phrase = phrase.encode('utf-8')
     phrase = phrase.lstrip(' ').rstrip(' ')
-    for k, v in replacements.iteritems():
+    for k, v in replacements.items():
         phrase = phrase.replace(k, v)
     return str(phrase).lower().translate(None, string.punctuation).decode('utf-8', 'ignore')
 
@@ -414,7 +414,7 @@ def filter_object_boxes(data, heights, widths, area_frac_thresh):
                 thresh_count += 1
             all_count += 1
         img['objects'] = filtered_obj
-    print('box threshod: keeping %i/%i boxes' % (thresh_count, all_count))
+    print(('box threshod: keeping %i/%i boxes' % (thresh_count, all_count)))
 
 
 def filter_by_idx(data, valid_list):
@@ -429,7 +429,7 @@ def obj_rel_cross_check(obj_data, rel_data, verbose=False):
     num_img = len(obj_data)
     num_correct = 0
     total_rel = 0
-    for i in xrange(num_img):
+    for i in range(num_img):
         assert(obj_data[i]['image_id'] == rel_data[i]['image_id'])
         objs = obj_data[i]['objects']
         rels = rel_data[i]['relationships']
@@ -440,16 +440,16 @@ def obj_rel_cross_check(obj_data, rel_data, verbose=False):
                 num_correct += 1
             elif verbose:
                 if rel['subject']['object_id'] not in ids:
-                    print(str(rel['subject']['object_id']) + 'cannot be found in ' + str(i))
+                    print((str(rel['subject']['object_id']) + 'cannot be found in ' + str(i)))
                 if rel['object']['object_id'] not in ids:
-                    print(str(rel['object']['object_id']) + 'cannot be found in ' + str(i))
+                    print((str(rel['object']['object_id']) + 'cannot be found in ' + str(i)))
             total_rel += 1
-    print('cross check: %i/%i relationship are correct' % (num_correct, total_rel))
+    print(('cross check: %i/%i relationship are correct' % (num_correct, total_rel)))
 
 
 def sync_objects(obj_data, rel_data):
     num_img = len(obj_data)
-    for i in xrange(num_img):
+    for i in range(num_img):
         assert(obj_data[i]['image_id'] == rel_data[i]['image_id'])
         objs = obj_data[i]['objects']
         rels = rel_data[i]['relationships']
@@ -474,23 +474,23 @@ def main(args):
 
     obj_alias_dict = {}
     if len(args.object_alias) > 0:
-        print('using object alias from %s' % (args.object_alias))
+        print(('using object alias from %s' % (args.object_alias)))
         obj_alias_dict, obj_vocab_list = make_alias_dict(args.object_alias)
 
     pred_alias_dict = {}
     if len(args.pred_alias) > 0:
-        print('using predicate alias from %s' % (args.pred_alias))
+        print(('using predicate alias from %s' % (args.pred_alias)))
         pred_alias_dict, pred_vocab_list = make_alias_dict(args.pred_alias)
 
     obj_list = []
     if len(args.object_list) > 0:
-        print('using object list from %s' % (args.object_list))
+        print(('using object list from %s' % (args.object_list)))
         obj_list = make_list(args.object_list)
         assert(len(obj_list) >= args.num_objects)
 
     pred_list = []
     if len(args.pred_list) > 0:
-        print('using predicate list from %s' % (args.pred_list))
+        print(('using predicate list from %s' % (args.pred_list)))
         pred_list = make_list(args.pred_list)
         assert(len(obj_list) >= args.num_predicates)
 
@@ -502,7 +502,7 @@ def main(args):
     assert(len(rel_data) == len(obj_data) and
            len(obj_data) == len(img_data))
 
-    print('read image db from %s' % args.imdb)
+    print(('read image db from %s' % args.imdb))
     imdb = h5.File(args.imdb, 'r')
     num_im, _, _, _ = imdb['images'].shape
     img_long_sizes = [512, 1024]
@@ -513,7 +513,7 @@ def main(args):
     img_data = filter_by_idx(img_data, valid_im_idx)
 
     # sanity check
-    for i in xrange(num_im):
+    for i in range(num_im):
         assert(obj_data[i]['image_id'] \
                == rel_data[i]['image_id'] \
                == img_data[i]['image_id'] \
@@ -525,7 +525,7 @@ def main(args):
         num_im = int(num_im*args.load_frac)
         obj_data = obj_data[:num_im]
         rel_data = rel_data[:num_im]
-    print('processing %i images' % num_im)
+    print(('processing %i images' % num_im))
 
     # sync objects from rel to obj_data
     sync_objects(obj_data, rel_data)
@@ -539,7 +539,7 @@ def main(args):
     heights, widths = imdb['original_heights'][:], imdb['original_widths'][:]
     if args.min_box_area_frac > 0:
         # filter out invalid small boxes
-        print('threshold bounding box by %f area fraction' % args.min_box_area_frac)
+        print(('threshold bounding box by %f area fraction' % args.min_box_area_frac))
         filter_object_boxes(obj_data, heights, widths, args.min_box_area_frac) # filter by box dimensions
 
     merge_duplicate_boxes(obj_data)
@@ -570,7 +570,7 @@ def main(args):
                    heights, widths, img_long_sizes)
 
     f.create_dataset('labels', data=encoded_label)
-    for k, boxes in encoded_boxes.items():
+    for k, boxes in list(encoded_boxes.items()):
         f.create_dataset('boxes_%i' % k, data=boxes)
     f.create_dataset('img_to_first_box', data=im_to_first_obj)
     f.create_dataset('img_to_last_box', data=im_to_last_obj)
@@ -585,8 +585,8 @@ def main(args):
 
    # build train/val/test splits
 
-    print('num objects = %i' % encoded_label.shape[0])
-    print('num relationships = %i' % encoded_predicate.shape[0])
+    print(('num objects = %i' % encoded_label.shape[0]))
+    print(('num relationships = %i' % encoded_predicate.shape[0]))
 
 
     opt = None

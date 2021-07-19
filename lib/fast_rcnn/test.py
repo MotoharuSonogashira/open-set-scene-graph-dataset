@@ -203,7 +203,7 @@ def test_net(net_name, weight_name, imdb, mode, max_per_image=100):
 
     net = get_network(net_name)(inputs)
     net.setup()
-    print ('Loading model weights from {:s}').format(weight_name)
+    print(('Loading model weights from {:s}').format(weight_name))
     saver = tf.train.Saver()
     saver.restore(sess, weight_name)
 
@@ -222,9 +222,9 @@ def test_net(net_name, weight_name, imdb, mode, max_per_image=100):
     else:
         eval_modes = [mode]
     multi_iter = [net.n_iter - 1] if net.iterable else [0]
-    print('Graph Inference Iteration ='),
+    print(('Graph Inference Iteration ='), end=' ')
     print(multi_iter)
-    print('EVAL MODES ='),
+    print(('EVAL MODES ='), end=' ')
     print(eval_modes)
 
     # initialize evaluator for each task
@@ -234,7 +234,7 @@ def test_net(net_name, weight_name, imdb, mode, max_per_image=100):
         for it in multi_iter:
             evaluators[m][it] = SceneGraphEvaluator(imdb, mode=m)
 
-    for im_i in xrange(num_images):
+    for im_i in range(num_images):
 
         im = imdb.im_getter(im_i)
 
@@ -270,9 +270,9 @@ def test_net(net_name, weight_name, imdb, mode, max_per_image=100):
                 evaluators[mode][iter_n].evaluate_scene_graph_entry(sg_entry, im_i, iou_thresh=0.5)
             _t['evaluate'].toc()
 
-        print 'im_detect: {:d}/{:d} {:.3f}s {:.3f}s' \
+        print('im_detect: {:d}/{:d} {:.3f}s {:.3f}s' \
               .format(im_i + 1, num_images, _t['im_detect'].average_time,
-                      _t['evaluate'].average_time)
+                      _t['evaluate'].average_time))
 
     # print out evaluation results
     for mode in eval_modes:
