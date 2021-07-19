@@ -9,14 +9,14 @@ Visualize a generated scene graph
 """
 
 from fast_rcnn.config import cfg
-from roi_data_layer.roidb import prepare_roidb
-from fast_rcnn.test import im_detect, gt_rois, non_gt_rois
+#from roi_data_layer.roidb import prepare_roidb
+#from fast_rcnn.test import im_detect, gt_rois, non_gt_rois
 from datasets.viz import viz_scene_graph, draw_scene_graph
 from datasets.eval_utils import ground_predictions
-from networks.factory import get_network
+#from networks.factory import get_network
 import numpy as np
-import tensorflow as tf
-from utils.cpu_nms import cpu_nms
+#import tensorflow as tf
+#from utils.cpu_nms import cpu_nms
 import matplotlib.pyplot as plt
 
 import json
@@ -66,7 +66,8 @@ def draw_graph_pred(im, boxes, cls_score, rel_score, gt_to_pred, roidb):
     pred_inds = rel_pred[:, :2].ravel()
 
     # draw graph predictions
-    graph_dict = draw_scene_graph(cls_pred, pred_inds, rel_pred)
+    if not cfg.no_graph: 
+        graph_dict = draw_scene_graph(cls_pred, pred_inds, rel_pred)
     viz_scene_graph(im, boxes, cls_pred, pred_inds, rel_pred, preprocess=False)
     """
     out_boxes = []

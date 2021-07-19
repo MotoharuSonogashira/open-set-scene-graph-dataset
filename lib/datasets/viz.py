@@ -4,6 +4,7 @@
 # Written by Danfei Xu
 # --------------------------------------------------------
 
+import os
 from fast_rcnn.config import cfg
 import matplotlib.pyplot as plt
 import numpy as np
@@ -27,10 +28,11 @@ def draw_scene_graph(labels, inds, rels):
                 obj_idx = np.where(inds == rel[1])[0][0]
                 viz_rels.append([sub_idx, obj_idx, rel[2]])
     return draw_graph(viz_labels, viz_rels, cfg)
+            
 
 
 def draw_graph(labels, rels, cfg):
-    u = Digraph('sg', filename='sg.gv')
+    u = Digraph('sg')
     u.body.append('size="6,6"')
     u.body.append('rankdir="LR"')
     u.node_attr.update(style='filled')
@@ -60,7 +62,11 @@ def draw_graph(labels, rels, cfg):
         u.edge(str(rel[0]), edge_key)
         u.edge(edge_key, str(rel[1]))
 
-    u.view()
+    if cfg.graph_filename is None:
+        u.view()
+    else:
+        stem, ext = os.path.splitext(cfg.graph_filename)
+        u.render(stem, format=ext[1:]) # remove dot from extention
 
     return out_dict
 
@@ -90,7 +96,7 @@ def _viz_scene_graph(im, rois, labels, rels=None, preprocess=True):
         # transpose dimensions, add back channel means
         im = (im.copy() + cfg.PIXEL_MEANS)[:, :, (2, 1, 0)].astype(np.uint8)
 
-    fig, ax = plt.subplots(figsize=(12, 12))
+    fig, ax = plt.subplots(figsize=cfg.figsize, dpi=cfg.dpi)
     ax.imshow(im, aspect='equal')
     if rels.size > 0:
         rel_inds = rels[:,:2].ravel().tolist()
@@ -128,7 +134,11 @@ def _viz_scene_graph(im, rois, labels, rels=None, preprocess=True):
                 bbox=dict(facecolor='green', alpha=0.5),
                 fontsize=14, color='white')
 
-    ax.set_title('Scene Graph Visualization', fontsize=14)
+    #ax.set_title('Scene Graph Visualization', fontsize=14)
     ax.axis('off')
     fig.tight_layout()
-    plt.show()
+    if cfg.image_filename is None:
+        plt.show()
+    else:
+        plt.savefig(cfg.image_filename, bbox_inches='tight')
+        plt.close()
