@@ -58,9 +58,7 @@ def draw_graph_pred(im, boxes, cls_score, rel_score, gt_to_pred, roidb):
                     rel_pred.append([i, j, rel_pred_mat[i,j], 1])
                     all_rels.append([i, j])
 
-    rel_pred = np.array(rel_pred)
-    if rel_pred.size == 0:
-        return
+    rel_pred = np.array(rel_pred, dtype=int).reshape(-1, 4)
 
     # indices of predicted boxes
     pred_inds = rel_pred[:, :2].ravel()
