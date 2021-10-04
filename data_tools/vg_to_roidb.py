@@ -352,11 +352,10 @@ def sentence_preprocess(phrase):
       'è': 'e',
       '…': '',
     }
-    phrase = phrase.encode('utf-8')
     phrase = phrase.lstrip(' ').rstrip(' ')
     for k, v in replacements.items():
         phrase = phrase.replace(k, v)
-    return str(phrase).lower().translate(None, string.punctuation).decode('utf-8', 'ignore')
+    return str(phrase).lower().translate(string.punctuation)
 
 
 def encode_splits(obj_data, opt=None):
