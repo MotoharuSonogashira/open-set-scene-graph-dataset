@@ -14,6 +14,19 @@ from graphviz import Digraph
 Utility for visualizing a scene graph
 """
 
+def labels_to_names(labels):
+    name_list = []
+    for i, l in enumerate(labels):
+        name = cfg.ind_to_class[l]
+        name_suffix = 1
+        obj_name = name
+        while obj_name in name_list:
+            obj_name = name + '_' + str(name_suffix)
+            name_suffix += 1
+        name_list.append(obj_name)
+    return name_list
+
+
 def draw_scene_graph(labels, inds, rels):
     """
     draw a graphviz graph of the scene graph topology
@@ -27,11 +40,9 @@ def draw_scene_graph(labels, inds, rels):
                 sub_idx = np.where(inds == rel[0])[0][0]
                 obj_idx = np.where(inds == rel[1])[0][0]
                 viz_rels.append([sub_idx, obj_idx, rel[2]])
-    return draw_graph(viz_labels, viz_rels, cfg)
+    return draw_graph(viz_labels, viz_rels)
             
-
-
-def draw_graph(labels, rels, cfg):
+def draw_graph(labels, rels, names=None):
     u = Digraph('sg')
     u.body.append('size="6,6"')
     u.body.append('rankdir="LR"')
@@ -43,16 +54,10 @@ def draw_graph(labels, rels, cfg):
 
     rels = np.array(rels)
     rel_inds = rels[:,:2].ravel().tolist()
-    name_list = []
+    names = labels_to_names(labels) if names is None else names
     for i, l in enumerate(labels):
+        obj_name = names[i]
         if i in rel_inds:
-            name = cfg.ind_to_class[l]
-            name_suffix = 1
-            obj_name = name
-            while obj_name in name_list:
-                obj_name = name + '_' + str(name_suffix)
-                name_suffix += 1
-            name_list.append(obj_name)
             u.node(str(i), label=obj_name, color='lightblue2')
 
     for rel in rels:
@@ -90,8 +95,7 @@ def viz_scene_graph(im, rois, labels, inds=None, rels=None, preprocess=True):
         viz_rels = np.array(viz_rels)
     return _viz_scene_graph(im, viz_rois, viz_labels, viz_rels, preprocess)
 
-
-def _viz_scene_graph(im, rois, labels, rels=None, preprocess=True):
+def _viz_scene_graph(im, rois, labels, rels=None, preprocess=True, names=None):
     if preprocess:
         # transpose dimensions, add back channel means
         im = (im.copy() + cfg.PIXEL_MEANS)[:, :, (2, 1, 0)].astype(np.uint8)
@@ -103,6 +107,7 @@ def _viz_scene_graph(im, rois, labels, rels=None, preprocess=True):
     else:
         rel_inds = []
     # draw bounding boxes
+    names = labels_to_names(labels) if names is None else names
     for i, bbox in enumerate(rois):
         if int(labels[i]) == 0 and i not in rel_inds:
             continue
@@ -112,7 +117,7 @@ def _viz_scene_graph(im, rois, labels, rels=None, preprocess=True):
                           bbox[3] - bbox[1], fill=False,
                           edgecolor='red', linewidth=3.5)
             )
-        label_str = cfg.ind_to_class[int(labels[i])]
+        label_str = names[i]
         ax.text(bbox[0], bbox[1] - 2,
                 label_str,
                 bbox=dict(facecolor='blue', alpha=0.5),
