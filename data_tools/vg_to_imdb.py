@@ -6,7 +6,19 @@ from threading import Thread, Lock
 
 import h5py
 import numpy as np
-from scipy.misc import imread, imresize
+
+from imageio import imread
+from PIL import Image
+
+def imresize(img, shape):
+        # emulate the deprecated scipy.misc.imresize used in IMP
+    if isinstance(shape, int): # percentage
+        shape = shape / 100 
+    if isinstance(shape, float): # fraction
+        shape = tuple((np.array(img.shape[:2]) * shape).astype(int))
+    return np.array(Image.fromarray(img).resize(shape[::-1], Image.LINEAR))
+        # reverse the order of ndarray.shape (HW) to Image.size (WH)
+
 
 def build_filename_dict(data):
     # First make sure all basenames are unique
