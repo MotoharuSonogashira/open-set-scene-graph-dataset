@@ -5,7 +5,7 @@
 # Written by Danfei Xu
 # --------------------------------------------------------
 
-import argparse, json, string
+import argparse, json, string, pickle
 from collections import Counter, OrderedDict
 import math
 
@@ -647,6 +647,19 @@ def main(args):
     labels_per_img = [set(labels[i : j + 1])
             for i, j in zip(im_to_first_obj, im_to_last_obj)]
 
+    if args.stat_output is not None:
+        # save the ordered class list
+        with open(args.stat_output, 'wb') as stat_f:
+            pickle.dump({
+                'ordered_classes'      : ordered_classes      ,
+                'known_classes'        : known_classes        ,
+                'missing_classes'      : missing_classes      ,
+                'train_unknown_classes': train_unknown_classes,
+                'val_unknown_classes'  : val_unknown_classes  ,
+                'test_unknown_classes' : test_unknown_classes ,
+                'classes_per_img'      : labels_per_img       ,
+            }, stat_f)
+
     # update the encoded labels
     idx_to_label.update(
             enumerate(['__unknown__', '__missing__'], max(idx_to_label) + 1))
@@ -733,6 +746,7 @@ if __name__ == '__main__':
     parser.add_argument('--processed_relationship_input')
     parser.add_argument('--processed_object_output')
     parser.add_argument('--processed_relationship_output')
+    parser.add_argument('--stat_output')
 
     args = parser.parse_args()
     main(args)

@@ -19,3 +19,4 @@ python3 vg_to_roidb_open.py \
     --load_frac $FRAC \
     --num_objects $N_OBJ \
     --num_predicates $N_REL \
+    --stat_output stat.pkl
