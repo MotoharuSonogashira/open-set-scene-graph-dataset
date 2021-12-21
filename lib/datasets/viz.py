@@ -58,11 +58,11 @@ def draw_graph(labels, rels, names=None):
     for i, l in enumerate(labels):
         obj_name = names[i]
         if i in rel_inds:
-            u.node(str(i), label=obj_name, color='lightblue2')
+            u.node(str(i), label=obj_name, color='lightcoral')
 
     for rel in rels:
         edge_key = '%s_%s' % (rel[0], rel[1])
-        u.node(edge_key, label=cfg.ind_to_predicate[rel[2]], color='red')
+        u.node(edge_key, label=cfg.ind_to_predicate[rel[2]], color='lightblue')
 
         u.edge(str(rel[0]), edge_key)
         u.edge(edge_key, str(rel[1]))
@@ -115,12 +115,12 @@ def _viz_scene_graph(im, rois, labels, rels=None, preprocess=True, names=None):
             plt.Rectangle((bbox[0], bbox[1]),
                           bbox[2] - bbox[0],
                           bbox[3] - bbox[1], fill=False,
-                          edgecolor='red', linewidth=3.5)
+                          edgecolor='red', linewidth=3.5, alpha=0.5)
             )
         label_str = names[i]
         ax.text(bbox[0], bbox[1] - 2,
                 label_str,
-                bbox=dict(facecolor='blue', alpha=0.5),
+                bbox=dict(facecolor='red', edgecolor='none', alpha=0.5),
                 fontsize=14, color='white')
 
     # draw relations
@@ -136,7 +136,7 @@ def _viz_scene_graph(im, rois, labels, rels=None, preprocess=True, names=None):
         ax.arrow(sub_ctr[0], sub_ctr[1], obj_ctr[0]-sub_ctr[0], obj_ctr[1]-sub_ctr[1], color='green')
 
         ax.text(line_ctr[0], line_ctr[1], predicate,
-                bbox=dict(facecolor='green', alpha=0.5),
+                bbox=dict(facecolor='blue', alpha=0.5),
                 fontsize=14, color='white')
 
     #ax.set_title('Scene Graph Visualization', fontsize=14)
