@@ -12,7 +12,7 @@ JSON=VG-SGG-dicts.json
 FRAC=1
 IMDB=imdb_1024.h5
 
-python vg_to_roidb.py \
+python3 vg_to_roidb.py \
     --imdb $IMDB \
     --json_file $OUT_PATH/$JSON \
     --h5_file $OUT_PATH/$H5 \
