@@ -6,7 +6,7 @@
 # --------------------------------------------------------
 
 import argparse, json, string
-from collections import Counter
+from collections import Counter, OrderedDict
 import math
 
 from math import floor
@@ -174,7 +174,8 @@ def merge_duplicate_boxes(data):
                 num_merged[prominent_type] += len(obj['mobjs'])
 
                 obj['mobjs'] = None
-                obj['names'] = list(set(obj['names']))  # remove duplicates
+                obj['names'] = list(OrderedDict.fromkeys(obj['names']))
+                    # remove duplicates while preserving the order
 
                 filtered_objs.append(obj)
             else:
